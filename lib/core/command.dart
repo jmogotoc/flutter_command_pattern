@@ -5,4 +5,5 @@ abstract class Command {
 
   Command(this.receiver);
   void execute();
+  void undo();
 }
