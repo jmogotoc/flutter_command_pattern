@@ -1,8 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_command_pattern/core/types/number_button_enum.dart';
+import 'package:flutter_command_pattern/core/types/option_button_enum.dart';
+import 'package:flutter_command_pattern/domain/calculator_invoker.dart';
+import 'package:flutter_command_pattern/domain/calculator_receiver.dart';
+import 'package:flutter_command_pattern/domain/commands/addition_command.dart';
+import 'package:flutter_command_pattern/domain/commands/divide_command.dart';
+import 'package:flutter_command_pattern/domain/commands/multiply_command.dart';
+import 'package:flutter_command_pattern/domain/commands/subtract_command.dart';
+import 'package:flutter_command_pattern/ui/widgets/calculator_screen_widget.dart';
 import 'package:flutter_command_pattern/ui/widgets/calculator_widget.dart';
 
-class CalculatorPage extends StatelessWidget {
+class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
+
+  @override
+  State<CalculatorPage> createState() => _CalculatorPageState();
+}
+
+class _CalculatorPageState extends State<CalculatorPage> {
+  late final CalculatorReceiver _calculatorReceiver;
+  late final CalculatorInvoker _calculatorInvoker;
+
+  List<(NumberButtonEnum?, OptionButtonEnum?)> history = [];
+  int counterTuple = 0;
+
+  @override
+  void initState() {
+    _calculatorReceiver = CalculatorReceiver();
+    _calculatorInvoker = CalculatorInvoker(_calculatorReceiver);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +41,35 @@ class CalculatorPage extends StatelessWidget {
               return Column(
                 children: [
                   Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     height: constraints.maxHeight * 0.5,
+                    child: CalculatorScreenWidget(
+                      result: _calculatorReceiver.result,
+                      history: history,
+                    ),
                   ),
-                  SizedBox(
+                  Container(
+                    padding: EdgeInsets.all(8),
                     height: constraints.maxHeight * 0.5,
-                    child: CalculatorWidget(),
+                    child: CalculatorWidget(
+                      onNumberTap: (NumberButtonEnum number) {
+                        history.add((number, null));
+                        setState(() {});
+                      },
+                      onOptionTap: (OptionButtonEnum option) {
+                        history[counterTuple] = (
+                          history[counterTuple].$1,
+                          option,
+                        );
+                        counterTuple++;
+
+                        if (option == OptionButtonEnum.equals) {
+                          calculeTotal();
+                        }
+
+                        setState(() {});
+                      },
+                    ),
                   ),
                 ],
               );
@@ -27,5 +78,43 @@ class CalculatorPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void calculeTotal() {
+    for (var tuple in history) {
+      final number = tuple.$1;
+      final option = tuple.$2;
+
+      if (number != null && option != null) {
+        switch (option) {
+          case OptionButtonEnum.addition:
+            _calculatorInvoker.execute(
+              AdditionCommand(_calculatorReceiver, number.value),
+            );
+            break;
+          case OptionButtonEnum.subtraction:
+            _calculatorInvoker.execute(
+              SubtractCommand(_calculatorReceiver, number.value),
+            );
+            break;
+          case OptionButtonEnum.multiplication:
+            _calculatorInvoker.execute(
+              MultiplyCommand(_calculatorReceiver, number.value),
+            );
+            break;
+          case OptionButtonEnum.division:
+            _calculatorInvoker.execute(
+              DivideCommand(_calculatorReceiver, number.value),
+            );
+            break;
+          case OptionButtonEnum.equals:
+            // Do nothing for equals
+            break;
+        }
+      }
+    }
+
+    history.clear();
+    counterTuple = 0;
   }
 }
