@@ -1,16 +1,19 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_command_pattern/core/types/number_button_enum.dart';
 
 class CalculatorNumberButton extends StatelessWidget {
   final double width;
   final double height;
-  final String value;
+  final NumberButtonEnum number;
+  final void Function(NumberButtonEnum) onTap;
   const CalculatorNumberButton({
     super.key,
-    required this.value,
+    required this.number,
     required this.width,
     required this.height,
+    required this.onTap,
   });
 
   @override
@@ -27,10 +30,10 @@ class CalculatorNumberButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           child: InkWell(
             borderRadius: BorderRadius.circular(18),
-            onTap: () {},
+            onTap: () => onTap.call(number),
             child: Center(
               child: Text(
-                value,
+                number.value.toString(),
                 style: TextStyle(
                   fontSize: fontSize,
                   fontWeight: FontWeight.w300,

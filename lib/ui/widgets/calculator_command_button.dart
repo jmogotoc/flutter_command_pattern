@@ -1,16 +1,19 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_command_pattern/core/types/option_button_enum.dart';
 
 class CalculatorCommandButton extends StatelessWidget {
   final double width;
   final double height;
-  final String value;
+  final OptionButtonEnum option;
+  final void Function(OptionButtonEnum) onTap;
   const CalculatorCommandButton({
     super.key,
-    required this.value,
+    required this.option,
     required this.width,
     required this.height,
+    required this.onTap,
   });
 
   @override
@@ -27,10 +30,10 @@ class CalculatorCommandButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           child: InkWell(
             borderRadius: BorderRadius.circular(18),
-            onTap: () {},
+            onTap: () => onTap.call(option),
             child: Center(
               child: Text(
-                value,
+                option.label,
                 style: TextStyle(
                   fontSize: fontSize,
                   fontWeight: FontWeight.w300,
