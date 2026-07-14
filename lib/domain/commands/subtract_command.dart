@@ -5,7 +5,6 @@ class SubtractCommand extends Command {
 
   final int _value;
 
-
   @override
   void execute() {
     receiver.subtract(_value);
