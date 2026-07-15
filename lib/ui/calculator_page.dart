@@ -21,8 +21,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
   late final CalculatorReceiver _calculatorReceiver;
   late final CalculatorInvoker _calculatorInvoker;
 
-  List<(NumberButtonEnum?, OptionButtonEnum?)> history = [];
+  List<(OptionButtonEnum?, NumberButtonEnum?)> history = [];
   int counterTuple = 0;
+  int limitTuple = 4;
 
   @override
   void initState() {
@@ -46,6 +47,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     child: CalculatorScreenWidget(
                       result: _calculatorReceiver.result,
                       history: history,
+                      onClear: () {
+                        resetHistory();
+                        resetCalculator();
+                        setState(() {});
+                      },
                     ),
                   ),
                   Container(
@@ -53,15 +59,23 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     height: constraints.maxHeight * 0.5,
                     child: CalculatorWidget(
                       onNumberTap: (NumberButtonEnum number) {
-                        history.add((number, null));
+                        if (history.isEmpty) {
+                          history.add((null, number));
+                          _calculatorInvoker.execute(
+                            MultiplyCommand(_calculatorReceiver, 0),
+                          );
+                        } else {
+                          history[counterTuple] = (
+                            history[counterTuple].$1,
+                            number,
+                          );
+                        }
+
+                        counterTuple++;
                         setState(() {});
                       },
                       onOptionTap: (OptionButtonEnum option) {
-                        history[counterTuple] = (
-                          history[counterTuple].$1,
-                          option,
-                        );
-                        counterTuple++;
+                        history.add((option, null));
 
                         if (option == OptionButtonEnum.equals) {
                           calculeTotal();
@@ -82,10 +96,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   void calculeTotal() {
     for (var tuple in history) {
-      final number = tuple.$1;
-      final option = tuple.$2;
+      final option = tuple.$1;
+      final number = tuple.$2;
 
-      if (number != null && option != null) {
+      if (number != null) {
         switch (option) {
           case OptionButtonEnum.addition:
             _calculatorInvoker.execute(
@@ -110,11 +124,24 @@ class _CalculatorPageState extends State<CalculatorPage> {
           case OptionButtonEnum.equals:
             // Do nothing for equals
             break;
+          default:
+            _calculatorInvoker.execute(
+              AdditionCommand(_calculatorReceiver, number.value),
+            );
+            break;
         }
       }
     }
 
+    resetHistory();
+  }
+
+  void resetHistory() {
     history.clear();
     counterTuple = 0;
+  }
+
+  void resetCalculator() {
+    _calculatorInvoker.execute(MultiplyCommand(_calculatorReceiver, 0));
   }
 }
