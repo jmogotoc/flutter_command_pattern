@@ -25,6 +25,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
   int counterTuple = 0;
   int limitTuple = 4;
 
+  bool? isLastNumber;
+  bool? isLastOption;
+
   @override
   void initState() {
     _calculatorReceiver = CalculatorReceiver();
@@ -59,29 +62,18 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     height: constraints.maxHeight * 0.5,
                     child: CalculatorWidget(
                       onNumberTap: (NumberButtonEnum number) {
-                        if (history.isEmpty) {
-                          history.add((null, number));
-                          _calculatorInvoker.execute(
-                            MultiplyCommand(_calculatorReceiver, 0),
-                          );
-                        } else {
-                          history[counterTuple] = (
-                            history[counterTuple].$1,
-                            number,
-                          );
+                        if (isLastOption == null || isLastOption == true) {
+                          onNumberTap(number);
+                          isLastNumber = true;
+                          isLastOption = false;
                         }
-
-                        counterTuple++;
-                        setState(() {});
                       },
                       onOptionTap: (OptionButtonEnum option) {
-                        history.add((option, null));
-
-                        if (option == OptionButtonEnum.equals) {
-                          calculeTotal();
+                        if (isLastNumber == true) {
+                          onOptionTap(option);
+                          isLastNumber = false;
+                          isLastOption = true;
                         }
-
-                        setState(() {});
                       },
                     ),
                   ),
@@ -92,6 +84,28 @@ class _CalculatorPageState extends State<CalculatorPage> {
         ),
       ),
     );
+  }
+
+  void onNumberTap(NumberButtonEnum number) {
+    if (history.isEmpty) {
+      history.add((null, number));
+      _calculatorInvoker.execute(MultiplyCommand(_calculatorReceiver, 0));
+    } else {
+      history[counterTuple] = (history[counterTuple].$1, number);
+    }
+
+    counterTuple++;
+    setState(() {});
+  }
+
+  void onOptionTap(OptionButtonEnum option) {
+    history.add((option, null));
+
+    if (option == OptionButtonEnum.equals) {
+      calculeTotal();
+    }
+
+    setState(() {});
   }
 
   void calculeTotal() {
@@ -143,5 +157,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   void resetCalculator() {
     _calculatorInvoker.execute(MultiplyCommand(_calculatorReceiver, 0));
+    isLastNumber = null;
+    isLastOption = null;
   }
 }
