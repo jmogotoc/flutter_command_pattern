@@ -5,6 +5,7 @@ class CalculatorInvoker extends Invoker {
   CalculatorInvoker(super.receiver);
 
   final List<Command> _history = [];
+  List<Command> get history => _history;
 
   @override
   void execute(Command command) {
