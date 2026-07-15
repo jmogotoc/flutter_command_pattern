@@ -4,11 +4,13 @@ import 'package:flutter_command_pattern/core/types/option_button_enum.dart';
 
 class CalculatorScreenWidget extends StatelessWidget {
   final int result;
-  final List<(NumberButtonEnum?, OptionButtonEnum?)> history;
+  final List<(OptionButtonEnum?, NumberButtonEnum?)> history;
+  final VoidCallback onClear;
   const CalculatorScreenWidget({
     super.key,
     required this.result,
     required this.history,
+    required this.onClear,
   });
 
   @override
@@ -19,24 +21,30 @@ class CalculatorScreenWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
+          children: [
+            IconButton(onPressed: onClear, icon: Icon(Icons.cleaning_services)),
+          ],
+        ),
+        Spacer(),
+        Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: history.map((tuple) {
-            final number = tuple.$1;
-            final option = tuple.$2;
+            final option = tuple.$1;
+            final number = tuple.$2;
 
             return Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (number != null)
-                  Text(
-                    '${number.value} ',
-                    style: const TextStyle(color: Colors.black, fontSize: 32),
-                  ),
                 if (option != null)
                   Text(
                     '${option.label} ',
+                    style: const TextStyle(color: Colors.black, fontSize: 32),
+                  ),
+                if (number != null)
+                  Text(
+                    '${number.value} ',
                     style: const TextStyle(color: Colors.black, fontSize: 32),
                   ),
               ],
