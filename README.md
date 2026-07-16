@@ -27,9 +27,8 @@ A continuación, se detalla el diagrama del proyecto, resaltando la estructura y
   <a href="#topicos">Topicos</a> •
   <a href="#instalación-y-ejecución">Instalación y ejecución</a> •
   <a href="#consideraciones">Consideraciones</a> •
-  <a href="#tecnologias">Tecnologías</a> •
-  <a href="#credits">Autores</a> •
-  <a href="#related">Relacionados</a>
+  <a href="#autores">Autores</a> •
+  <a href="#relacionados">Relacionados</a>
 </p>
 
 ## Topicos
