@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_command_pattern/core/types/number_button_enum.dart';
 import 'package:flutter_command_pattern/core/types/option_button_enum.dart';
-import 'package:flutter_command_pattern/ui/widgets/calculator_command_button.dart';
-import 'package:flutter_command_pattern/ui/widgets/calculator_number_button.dart';
+import 'package:flutter_command_pattern/features/calculator/presentation/widgets/calculator_command_button.dart';
+import 'package:flutter_command_pattern/features/calculator/presentation/widgets/calculator_number_button.dart';
 
 class CalculatorWidget extends StatelessWidget {
   final void Function(NumberButtonEnum) onNumberTap;

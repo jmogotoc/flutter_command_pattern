@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_command_pattern/core/types/number_button_enum.dart';
 import 'package:flutter_command_pattern/core/types/option_button_enum.dart';
-import 'package:flutter_command_pattern/domain/calculator_invoker.dart';
-import 'package:flutter_command_pattern/domain/calculator_receiver.dart';
-import 'package:flutter_command_pattern/domain/commands/addition_command.dart';
-import 'package:flutter_command_pattern/domain/commands/divide_command.dart';
-import 'package:flutter_command_pattern/domain/commands/multiply_command.dart';
-import 'package:flutter_command_pattern/domain/commands/subtract_command.dart';
-import 'package:flutter_command_pattern/ui/widgets/calculator_screen_widget.dart';
-import 'package:flutter_command_pattern/ui/widgets/calculator_widget.dart';
+import 'package:flutter_command_pattern/features/calculator/domain/calculator_invoker.dart';
+import 'package:flutter_command_pattern/features/calculator/domain/calculator_receiver.dart';
+import 'package:flutter_command_pattern/features/calculator/domain/commands/addition_command.dart';
+import 'package:flutter_command_pattern/features/calculator/domain/commands/divide_command.dart';
+import 'package:flutter_command_pattern/features/calculator/domain/commands/multiply_command.dart';
+import 'package:flutter_command_pattern/features/calculator/domain/commands/subtract_command.dart';
+import 'package:flutter_command_pattern/features/calculator/presentation/widgets/calculator_screen_widget.dart';
+import 'package:flutter_command_pattern/features/calculator/presentation/widgets/calculator_widget.dart';
 
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
