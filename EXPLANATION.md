@@ -45,22 +45,25 @@ lib/
 │   └── types/
 │       ├── number_button_enum.dart   # Botones numéricos (0-9)
 │       └── option_button_enum.dart   # Botones de operación (+, -, ×, ÷, =)
-├── domain/
-│   ├── calculator_invoker.dart       # Invoker concreto con historial y undo
-│   ├── calculator_receiver.dart      # Receiver concreto con lógica aritmética
-│   └── commands/
-│       ├── addition_command.dart     # Command: suma
-│       ├── divide_command.dart       # Command: división
-│       ├── multiply_command.dart     # Command: multiplicación
-│       └── subtract_command.dart     # Command: resta
-├── main.dart                         # Punto de entrada
-└── ui/
-    ├── calculator_page.dart          # Cliente: orquesta UI + comandos
-    └── widgets/
-        ├── calculator_command_button.dart  # Botón de operación
-        ├── calculator_number_button.dart   # Botón numérico
-        ├── calculator_screen_widget.dart   # Pantalla: historial + resultado
-        └── calculator_widget.dart          # Teclado completo (grid + columna)
+├── features/
+│   └── calculator/
+│       ├── domain/
+│       │   ├── calculator_invoker.dart       # Invoker concreto con historial y undo
+│       │   ├── calculator_receiver.dart      # Receiver concreto con lógica aritmética
+│       │   └── commands
+│       │       ├── addition_command.dart     # Command: suma
+│       │       ├── divide_command.dart       # Command: división
+│       │       ├── multiply_command.dart     # Command: multiplicación
+│       │       └── subtract_command.dart     # Command: resta
+│       └── presentation/
+│           ├── pages/
+│           │   └── calculator_page.dart            # Cliente: orquesta UI + comandos
+│           └── widgets/
+│               ├── calculator_command_button.dart  # Botón de operación
+│               ├── calculator_number_button.dart   # Botón numérico
+│               ├── calculator_screen_widget.dart   # Pantalla: historial + resultado
+│               └── calculator_widget.dart          # Teclado completo (grid + columna)
+└── main.dart                                 # Punto de entrada
 ```
 
 > **Diagrama de interacción:** Las clases se relacionan según el patrón clásico: el **Cliente** (`CalculatorPage`) crea **Comandos Concretos** pasándoles el **Receiver** (`CalculatorReceiver`), y los envía al **Invoker** (`CalculatorInvoker`) para su ejecución. El Invoker mantiene historial.
@@ -261,11 +264,11 @@ class DivideCommand extends Command {
 
 ---
 
-### 4. Capa de Presentación — UI (`lib/ui/`)
+### 4. Capa de Presentación — UI (`lib/features/calculator/presentation/`)
 
 La UI está compuesta por widgets reutilizables y una página principal que actúa como **Cliente** del patrón Command.
 
-#### 4.1 Widgets de Botones — `lib/ui/widgets/`
+#### 4.1 Widgets de Botones — `lib/features/calculator/presentation/widgets/`
 
 **Botón Numérico** (`calculator_number_button.dart`):
 ```dart
@@ -369,7 +372,7 @@ Responsive: usa `LayoutBuilder` para adaptarse a cualquier tamaño de pantalla.
 
 ---
 
-### 5. Cliente Principal: `CalculatorPage` — `lib/ui/calculator_page.dart`
+### 5. Cliente Principal: `CalculatorPage` — `lib/features/calculator/presentation/pages/calculator_page.dart`
 
 El `CalculatorPage` es el **Cliente** del patrón Command: orquesta la UI, gestiona el estado de entrada del usuario y coordina la ejecución de comandos a través del `Invoker`.
 
